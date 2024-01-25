@@ -22,6 +22,14 @@
       "fieldValidateRulesMinlength": "6"
     },
     {
+      "fieldName": "userEmail",
+      "fieldType": "String",
+      "fieldValidateRules": ["unique", "required", "minlength", "maxlength", "pattern"],
+      "fieldValidateRulesMaxlength": "256",
+      "fieldValidateRulesMinlength": "5",
+      "fieldValidateRulesPattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+    },
+    {
       "fieldName": "password",
       "fieldType": "String",
       "fieldValidateRules": ["required", "maxlength"],

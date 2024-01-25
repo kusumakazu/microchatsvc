@@ -1,4 +1,4 @@
-
+EMAIL_MAX_LENGTH = 256
 application {
   config {
     baseName microchatsvc
@@ -30,6 +30,7 @@ application {
 entity UserAccount {
     username String required unique minlength(3) maxlength(50)
     displayName String required minlength(6) maxlength(50)
+    userEmail String unique required minlength(5) maxlength(EMAIL_MAX_LENGTH) pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
   	password String required maxlength(124)
 }
 
@@ -41,7 +42,7 @@ entity Asset{
 }
 
 entity Message {
-  content String required
+  content TextBlob required
   timestamp Instant required
   senderId String
   recipientId String
@@ -50,7 +51,15 @@ entity Message {
 }
 
 relationship ManyToOne {
-  Message{sender} to UserAccount
-  Message{recipient} to UserAccount
-
+    Message{sender} to UserAccount
+    Message{recipient} to UserAccount
+    GroupChat{members} to UserAccount
 }
+
+ entity GroupChat {
+     groupName String required
+     groupUserAccountId String
+     groupLogoId String
+ }
+
+

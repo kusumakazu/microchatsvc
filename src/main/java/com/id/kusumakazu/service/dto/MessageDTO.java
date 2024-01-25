@@ -13,7 +13,6 @@ public class MessageDTO implements Serializable {
 
     private String id;
 
-    @NotNull
     private String content;
 
     @NotNull

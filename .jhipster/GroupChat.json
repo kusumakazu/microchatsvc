@@ -1,0 +1,38 @@
+{
+  "applications": ["microchatsvc"],
+  "changelogDate": "20240125081419",
+  "clientRootFolder": "microchatsvc",
+  "databaseType": "mongodb",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "group_chat",
+  "fields": [
+    {
+      "fieldName": "groupName",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "groupUserAccountId",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "groupLogoId",
+      "fieldType": "String"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "microchatsvc",
+  "name": "GroupChat",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "userAccount",
+      "relationshipName": "members",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

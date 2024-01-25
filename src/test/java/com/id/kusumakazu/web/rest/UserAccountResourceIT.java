@@ -34,6 +34,9 @@ class UserAccountResourceIT {
     private static final String DEFAULT_DISPLAY_NAME = "AAAAAAAAAA";
     private static final String UPDATED_DISPLAY_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_USER_EMAIL = "g\\z?x@(%;a!./k";
+    private static final String UPDATED_USER_EMAIL = "z@\\r6Q9(.):=\\#";
+
     private static final String DEFAULT_PASSWORD = "AAAAAAAAAA";
     private static final String UPDATED_PASSWORD = "BBBBBBBBBB";
 
@@ -58,7 +61,11 @@ class UserAccountResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserAccount createEntity() {
-        UserAccount userAccount = new UserAccount().username(DEFAULT_USERNAME).displayName(DEFAULT_DISPLAY_NAME).password(DEFAULT_PASSWORD);
+        UserAccount userAccount = new UserAccount()
+            .username(DEFAULT_USERNAME)
+            .displayName(DEFAULT_DISPLAY_NAME)
+            .userEmail(DEFAULT_USER_EMAIL)
+            .password(DEFAULT_PASSWORD);
         return userAccount;
     }
 
@@ -69,7 +76,11 @@ class UserAccountResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserAccount createUpdatedEntity() {
-        UserAccount userAccount = new UserAccount().username(UPDATED_USERNAME).displayName(UPDATED_DISPLAY_NAME).password(UPDATED_PASSWORD);
+        UserAccount userAccount = new UserAccount()
+            .username(UPDATED_USERNAME)
+            .displayName(UPDATED_DISPLAY_NAME)
+            .userEmail(UPDATED_USER_EMAIL)
+            .password(UPDATED_PASSWORD);
         return userAccount;
     }
 
@@ -96,6 +107,7 @@ class UserAccountResourceIT {
         UserAccount testUserAccount = userAccountList.get(userAccountList.size() - 1);
         assertThat(testUserAccount.getUsername()).isEqualTo(DEFAULT_USERNAME);
         assertThat(testUserAccount.getDisplayName()).isEqualTo(DEFAULT_DISPLAY_NAME);
+        assertThat(testUserAccount.getUserEmail()).isEqualTo(DEFAULT_USER_EMAIL);
         assertThat(testUserAccount.getPassword()).isEqualTo(DEFAULT_PASSWORD);
     }
 
@@ -158,6 +170,25 @@ class UserAccountResourceIT {
     }
 
     @Test
+    void checkUserEmailIsRequired() throws Exception {
+        int databaseSizeBeforeTest = userAccountRepository.findAll().size();
+        // set the field null
+        userAccount.setUserEmail(null);
+
+        // Create the UserAccount, which fails.
+        UserAccountDTO userAccountDTO = userAccountMapper.toDto(userAccount);
+
+        restUserAccountMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(userAccountDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<UserAccount> userAccountList = userAccountRepository.findAll();
+        assertThat(userAccountList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
     void checkPasswordIsRequired() throws Exception {
         int databaseSizeBeforeTest = userAccountRepository.findAll().size();
         // set the field null
@@ -189,6 +220,7 @@ class UserAccountResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(userAccount.getId())))
             .andExpect(jsonPath("$.[*].username").value(hasItem(DEFAULT_USERNAME)))
             .andExpect(jsonPath("$.[*].displayName").value(hasItem(DEFAULT_DISPLAY_NAME)))
+            .andExpect(jsonPath("$.[*].userEmail").value(hasItem(DEFAULT_USER_EMAIL)))
             .andExpect(jsonPath("$.[*].password").value(hasItem(DEFAULT_PASSWORD)));
     }
 
@@ -205,6 +237,7 @@ class UserAccountResourceIT {
             .andExpect(jsonPath("$.id").value(userAccount.getId()))
             .andExpect(jsonPath("$.username").value(DEFAULT_USERNAME))
             .andExpect(jsonPath("$.displayName").value(DEFAULT_DISPLAY_NAME))
+            .andExpect(jsonPath("$.userEmail").value(DEFAULT_USER_EMAIL))
             .andExpect(jsonPath("$.password").value(DEFAULT_PASSWORD));
     }
 
@@ -223,7 +256,11 @@ class UserAccountResourceIT {
 
         // Update the userAccount
         UserAccount updatedUserAccount = userAccountRepository.findById(userAccount.getId()).get();
-        updatedUserAccount.username(UPDATED_USERNAME).displayName(UPDATED_DISPLAY_NAME).password(UPDATED_PASSWORD);
+        updatedUserAccount
+            .username(UPDATED_USERNAME)
+            .displayName(UPDATED_DISPLAY_NAME)
+            .userEmail(UPDATED_USER_EMAIL)
+            .password(UPDATED_PASSWORD);
         UserAccountDTO userAccountDTO = userAccountMapper.toDto(updatedUserAccount);
 
         restUserAccountMockMvc
@@ -240,6 +277,7 @@ class UserAccountResourceIT {
         UserAccount testUserAccount = userAccountList.get(userAccountList.size() - 1);
         assertThat(testUserAccount.getUsername()).isEqualTo(UPDATED_USERNAME);
         assertThat(testUserAccount.getDisplayName()).isEqualTo(UPDATED_DISPLAY_NAME);
+        assertThat(testUserAccount.getUserEmail()).isEqualTo(UPDATED_USER_EMAIL);
         assertThat(testUserAccount.getPassword()).isEqualTo(UPDATED_PASSWORD);
     }
 
@@ -316,7 +354,7 @@ class UserAccountResourceIT {
         UserAccount partialUpdatedUserAccount = new UserAccount();
         partialUpdatedUserAccount.setId(userAccount.getId());
 
-        partialUpdatedUserAccount.username(UPDATED_USERNAME).displayName(UPDATED_DISPLAY_NAME).password(UPDATED_PASSWORD);
+        partialUpdatedUserAccount.displayName(UPDATED_DISPLAY_NAME).password(UPDATED_PASSWORD);
 
         restUserAccountMockMvc
             .perform(
@@ -330,8 +368,9 @@ class UserAccountResourceIT {
         List<UserAccount> userAccountList = userAccountRepository.findAll();
         assertThat(userAccountList).hasSize(databaseSizeBeforeUpdate);
         UserAccount testUserAccount = userAccountList.get(userAccountList.size() - 1);
-        assertThat(testUserAccount.getUsername()).isEqualTo(UPDATED_USERNAME);
+        assertThat(testUserAccount.getUsername()).isEqualTo(DEFAULT_USERNAME);
         assertThat(testUserAccount.getDisplayName()).isEqualTo(UPDATED_DISPLAY_NAME);
+        assertThat(testUserAccount.getUserEmail()).isEqualTo(DEFAULT_USER_EMAIL);
         assertThat(testUserAccount.getPassword()).isEqualTo(UPDATED_PASSWORD);
     }
 
@@ -346,7 +385,11 @@ class UserAccountResourceIT {
         UserAccount partialUpdatedUserAccount = new UserAccount();
         partialUpdatedUserAccount.setId(userAccount.getId());
 
-        partialUpdatedUserAccount.username(UPDATED_USERNAME).displayName(UPDATED_DISPLAY_NAME).password(UPDATED_PASSWORD);
+        partialUpdatedUserAccount
+            .username(UPDATED_USERNAME)
+            .displayName(UPDATED_DISPLAY_NAME)
+            .userEmail(UPDATED_USER_EMAIL)
+            .password(UPDATED_PASSWORD);
 
         restUserAccountMockMvc
             .perform(
@@ -362,6 +405,7 @@ class UserAccountResourceIT {
         UserAccount testUserAccount = userAccountList.get(userAccountList.size() - 1);
         assertThat(testUserAccount.getUsername()).isEqualTo(UPDATED_USERNAME);
         assertThat(testUserAccount.getDisplayName()).isEqualTo(UPDATED_DISPLAY_NAME);
+        assertThat(testUserAccount.getUserEmail()).isEqualTo(UPDATED_USER_EMAIL);
         assertThat(testUserAccount.getPassword()).isEqualTo(UPDATED_PASSWORD);
     }
 

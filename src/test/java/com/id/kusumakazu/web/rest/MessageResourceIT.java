@@ -21,6 +21,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.Base64Utils;
 
 /**
  * Integration tests for the {@link MessageResource} REST controller.
@@ -142,23 +143,6 @@ class MessageResourceIT {
     }
 
     @Test
-    void checkContentIsRequired() throws Exception {
-        int databaseSizeBeforeTest = messageRepository.findAll().size();
-        // set the field null
-        message.setContent(null);
-
-        // Create the Message, which fails.
-        MessageDTO messageDTO = messageMapper.toDto(message);
-
-        restMessageMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(messageDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<Message> messageList = messageRepository.findAll();
-        assertThat(messageList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
     void checkTimestampIsRequired() throws Exception {
         int databaseSizeBeforeTest = messageRepository.findAll().size();
         // set the field null
@@ -186,7 +170,7 @@ class MessageResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(message.getId())))
-            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
+            .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT.toString())))
             .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
             .andExpect(jsonPath("$.[*].senderId").value(hasItem(DEFAULT_SENDER_ID)))
             .andExpect(jsonPath("$.[*].recipientId").value(hasItem(DEFAULT_RECIPIENT_ID)))
@@ -205,7 +189,7 @@ class MessageResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(message.getId()))
-            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT))
+            .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT.toString()))
             .andExpect(jsonPath("$.timestamp").value(DEFAULT_TIMESTAMP.toString()))
             .andExpect(jsonPath("$.senderId").value(DEFAULT_SENDER_ID))
             .andExpect(jsonPath("$.recipientId").value(DEFAULT_RECIPIENT_ID))
