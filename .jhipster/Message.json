@@ -1,0 +1,56 @@
+{
+  "applications": ["microchatsvc"],
+  "changelogDate": "20240125063944",
+  "clientRootFolder": "microchatsvc",
+  "databaseType": "mongodb",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "message",
+  "fields": [
+    {
+      "fieldName": "content",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "timestamp",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "senderId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "recipientId",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "isSent",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "isRead",
+      "fieldType": "Boolean"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "microchatsvc",
+  "name": "Message",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "userAccount",
+      "relationshipName": "sender",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityName": "userAccount",
+      "relationshipName": "recipient",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}

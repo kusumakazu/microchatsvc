@@ -1,0 +1,56 @@
+
+application {
+  config {
+    baseName microchatsvc
+    applicationType microservice
+    packageName com.id.kusumakazu
+    authenticationType jwt
+    databaseType mongodb
+//    devDatabaseType mongodb
+//    prodDatabaseType mongodb
+    serverPort 6050
+    clientPackageManager npm
+    dtoSuffix DTO
+    buildTool gradle
+    cacheProvider no
+    enableSwaggerCodegen true
+    nativeLanguage en
+    cacheProvider hazelcast
+    serviceDiscoveryType eureka
+    reactive false
+  }
+
+  dto * with mapstruct
+  entities *
+  service * with serviceClass
+  service * with serviceImpl
+
+}
+
+entity UserAccount {
+    username String required unique minlength(3) maxlength(50)
+    displayName String required minlength(6) maxlength(50)
+  	password String required maxlength(124)
+}
+
+entity Asset{
+	uuid String
+    assetName TextBlob
+    assetType String
+    asset Blob
+}
+
+entity Message {
+  content String required
+  timestamp Instant required
+  senderId Long
+  recipientId Long
+  isSent Boolean //false
+  isRead Boolean  // default false
+}
+
+relationship ManyToOne {
+  Message{sender} to UserAccount
+  Message{recipient} to UserAccount
+
+}
