@@ -43,8 +43,8 @@ entity Asset{
 entity Message {
   content String required
   timestamp Instant required
-  senderId Long
-  recipientId Long
+  senderId String
+  recipientId String
   isSent Boolean //false
   isRead Boolean  // default false
 }
