@@ -19,11 +19,11 @@
     },
     {
       "fieldName": "senderId",
-      "fieldType": "Long"
+      "fieldType": "String"
     },
     {
       "fieldName": "recipientId",
-      "fieldType": "Long"
+      "fieldType": "String"
     },
     {
       "fieldName": "isSent",

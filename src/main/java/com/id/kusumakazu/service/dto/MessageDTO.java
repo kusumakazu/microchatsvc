@@ -19,9 +19,9 @@ public class MessageDTO implements Serializable {
     @NotNull
     private Instant timestamp;
 
-    private Long senderId;
+    private String senderId;
 
-    private Long recipientId;
+    private String recipientId;
 
     private Boolean isSent;
 
@@ -55,19 +55,19 @@ public class MessageDTO implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Long getSenderId() {
+    public String getSenderId() {
         return senderId;
     }
 
-    public void setSenderId(Long senderId) {
+    public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
 
-    public Long getRecipientId() {
+    public String getRecipientId() {
         return recipientId;
     }
 
-    public void setRecipientId(Long recipientId) {
+    public void setRecipientId(String recipientId) {
         this.recipientId = recipientId;
     }
 
@@ -131,8 +131,8 @@ public class MessageDTO implements Serializable {
             "id='" + getId() + "'" +
             ", content='" + getContent() + "'" +
             ", timestamp='" + getTimestamp() + "'" +
-            ", senderId=" + getSenderId() +
-            ", recipientId=" + getRecipientId() +
+            ", senderId='" + getSenderId() + "'" +
+            ", recipientId='" + getRecipientId() + "'" +
             ", isSent='" + getIsSent() + "'" +
             ", isRead='" + getIsRead() + "'" +
             ", sender=" + getSender() +

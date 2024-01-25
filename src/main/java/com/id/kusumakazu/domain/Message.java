@@ -29,10 +29,10 @@ public class Message implements Serializable {
     private Instant timestamp;
 
     @Field("sender_id")
-    private Long senderId;
+    private String senderId;
 
     @Field("recipient_id")
-    private Long recipientId;
+    private String recipientId;
 
     @Field("is_sent")
     private Boolean isSent;
@@ -89,29 +89,29 @@ public class Message implements Serializable {
         this.timestamp = timestamp;
     }
 
-    public Long getSenderId() {
+    public String getSenderId() {
         return this.senderId;
     }
 
-    public Message senderId(Long senderId) {
+    public Message senderId(String senderId) {
         this.setSenderId(senderId);
         return this;
     }
 
-    public void setSenderId(Long senderId) {
+    public void setSenderId(String senderId) {
         this.senderId = senderId;
     }
 
-    public Long getRecipientId() {
+    public String getRecipientId() {
         return this.recipientId;
     }
 
-    public Message recipientId(Long recipientId) {
+    public Message recipientId(String recipientId) {
         this.setRecipientId(recipientId);
         return this;
     }
 
-    public void setRecipientId(Long recipientId) {
+    public void setRecipientId(String recipientId) {
         this.recipientId = recipientId;
     }
 
@@ -193,8 +193,8 @@ public class Message implements Serializable {
             "id=" + getId() +
             ", content='" + getContent() + "'" +
             ", timestamp='" + getTimestamp() + "'" +
-            ", senderId=" + getSenderId() +
-            ", recipientId=" + getRecipientId() +
+            ", senderId='" + getSenderId() + "'" +
+            ", recipientId='" + getRecipientId() + "'" +
             ", isSent='" + getIsSent() + "'" +
             ", isRead='" + getIsRead() + "'" +
             "}";

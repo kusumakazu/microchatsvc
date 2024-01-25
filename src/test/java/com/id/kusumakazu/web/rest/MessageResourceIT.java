@@ -36,11 +36,11 @@ class MessageResourceIT {
     private static final Instant DEFAULT_TIMESTAMP = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_TIMESTAMP = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final Long DEFAULT_SENDER_ID = 1L;
-    private static final Long UPDATED_SENDER_ID = 2L;
+    private static final String DEFAULT_SENDER_ID = "AAAAAAAAAA";
+    private static final String UPDATED_SENDER_ID = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_RECIPIENT_ID = 1L;
-    private static final Long UPDATED_RECIPIENT_ID = 2L;
+    private static final String DEFAULT_RECIPIENT_ID = "AAAAAAAAAA";
+    private static final String UPDATED_RECIPIENT_ID = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_IS_SENT = false;
     private static final Boolean UPDATED_IS_SENT = true;
@@ -188,8 +188,8 @@ class MessageResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(message.getId())))
             .andExpect(jsonPath("$.[*].content").value(hasItem(DEFAULT_CONTENT)))
             .andExpect(jsonPath("$.[*].timestamp").value(hasItem(DEFAULT_TIMESTAMP.toString())))
-            .andExpect(jsonPath("$.[*].senderId").value(hasItem(DEFAULT_SENDER_ID.intValue())))
-            .andExpect(jsonPath("$.[*].recipientId").value(hasItem(DEFAULT_RECIPIENT_ID.intValue())))
+            .andExpect(jsonPath("$.[*].senderId").value(hasItem(DEFAULT_SENDER_ID)))
+            .andExpect(jsonPath("$.[*].recipientId").value(hasItem(DEFAULT_RECIPIENT_ID)))
             .andExpect(jsonPath("$.[*].isSent").value(hasItem(DEFAULT_IS_SENT.booleanValue())))
             .andExpect(jsonPath("$.[*].isRead").value(hasItem(DEFAULT_IS_READ.booleanValue())));
     }
@@ -207,8 +207,8 @@ class MessageResourceIT {
             .andExpect(jsonPath("$.id").value(message.getId()))
             .andExpect(jsonPath("$.content").value(DEFAULT_CONTENT))
             .andExpect(jsonPath("$.timestamp").value(DEFAULT_TIMESTAMP.toString()))
-            .andExpect(jsonPath("$.senderId").value(DEFAULT_SENDER_ID.intValue()))
-            .andExpect(jsonPath("$.recipientId").value(DEFAULT_RECIPIENT_ID.intValue()))
+            .andExpect(jsonPath("$.senderId").value(DEFAULT_SENDER_ID))
+            .andExpect(jsonPath("$.recipientId").value(DEFAULT_RECIPIENT_ID))
             .andExpect(jsonPath("$.isSent").value(DEFAULT_IS_SENT.booleanValue()))
             .andExpect(jsonPath("$.isRead").value(DEFAULT_IS_READ.booleanValue()));
     }
