@@ -53,4 +53,6 @@ public interface UserAccountService {
      * @param id the id of the entity.
      */
     void delete(String id);
+
+    Optional<UserAccountDTO> findOneByUserEmail(String email);
 }

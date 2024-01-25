@@ -78,4 +78,10 @@ public class UserAccountServiceImpl implements UserAccountService {
         log.debug("Request to delete UserAccount : {}", id);
         userAccountRepository.deleteById(id);
     }
+
+    @Override
+    public Optional<UserAccountDTO> findOneByUserEmail(String email) {
+        log.debug("Request to get UserAccount by email : {}", email);
+        return userAccountRepository.findOneByUserEmail(email).map(userAccountMapper::toDto);
+    }
 }

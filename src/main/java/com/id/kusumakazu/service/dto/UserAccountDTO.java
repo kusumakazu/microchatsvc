@@ -21,6 +21,11 @@ public class UserAccountDTO implements Serializable {
     private String displayName;
 
     @NotNull
+    @Size(min = 5, max = 256)
+    @Pattern(regexp = "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$")
+    private String userEmail;
+
+    @NotNull
     @Size(max = 124)
     private String password;
 
@@ -46,6 +51,14 @@ public class UserAccountDTO implements Serializable {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getPassword() {
@@ -84,6 +97,7 @@ public class UserAccountDTO implements Serializable {
             "id='" + getId() + "'" +
             ", username='" + getUsername() + "'" +
             ", displayName='" + getDisplayName() + "'" +
+            ", userEmail='" + getUserEmail() + "'" +
             ", password='" + getPassword() + "'" +
             "}";
     }

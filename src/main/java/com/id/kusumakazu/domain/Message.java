@@ -20,7 +20,6 @@ public class Message implements Serializable {
     @Id
     private String id;
 
-    @NotNull
     @Field("content")
     private String content;
 
