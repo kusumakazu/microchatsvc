@@ -15,10 +15,10 @@
 
 logging:
   level:
-    ROOT: DEBUG
-    tech.jhipster: DEBUG
-    org.hibernate.SQL: DEBUG
-    com.id.kusumakazu: DEBUG
+    ROOT: INFO
+    tech.jhipster: INFO
+    org.hibernate.SQL: INFO
+    com.id.kusumakazu: INFO
 
 eureka:
   instance:
@@ -28,6 +28,12 @@ eureka:
       defaultZone: http://admin:${jhipster.registry.password}@localhost:8761/eureka/
 
 spring:
+  codec:
+    max-in-memory-size: 20MB
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   devtools:
     restart:
       enabled: true

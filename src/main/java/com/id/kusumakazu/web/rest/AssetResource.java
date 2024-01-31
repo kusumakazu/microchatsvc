@@ -1,9 +1,11 @@
 package com.id.kusumakazu.web.rest;
 
+import com.id.kusumakazu.domain.utility.LoadFile;
 import com.id.kusumakazu.repository.AssetRepository;
 import com.id.kusumakazu.service.AssetService;
 import com.id.kusumakazu.service.dto.AssetDTO;
 import com.id.kusumakazu.web.rest.errors.BadRequestAlertException;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -12,8 +14,11 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
@@ -63,7 +68,7 @@ public class AssetResource {
     /**
      * {@code PUT  /assets/:id} : Updates an existing asset.
      *
-     * @param id the id of the assetDTO to save.
+     * @param id       the id of the assetDTO to save.
      * @param assetDTO the assetDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated assetDTO,
      * or with status {@code 400 (Bad Request)} if the assetDTO is not valid,
@@ -97,7 +102,7 @@ public class AssetResource {
     /**
      * {@code PATCH  /assets/:id} : Partial updates given fields of an existing asset, field will ignore if it is null
      *
-     * @param id the id of the assetDTO to save.
+     * @param id       the id of the assetDTO to save.
      * @param assetDTO the assetDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated assetDTO,
      * or with status {@code 400 (Bad Request)} if the assetDTO is not valid,
@@ -165,5 +170,42 @@ public class AssetResource {
         log.debug("REST request to delete Asset : {}", id);
         assetService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
+    }
+
+    @PostMapping("/assets/save-asset-from-zip")
+    public ResponseEntity<String> saveAssetFromZIP(@RequestParam MultipartFile file) {
+        log.info("Masuk Upload ...................................................");
+
+        assetService.saveAssetFromZIP(file);
+        return ResponseEntity.ok("ok");
+    }
+
+    @PostMapping("/assets/upload-grid-fs")
+    public ResponseEntity<String> uploadFileGridFs(@RequestParam("file") MultipartFile file) {
+        assetService.gridFsUploadFile(file);
+        return new ResponseEntity<>("File uploaded successfully!", HttpStatus.ACCEPTED.OK);
+    }
+
+    @PostMapping("/assets/upload")
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) throws Exception {
+        String res = assetService.addFile(file);
+        return new ResponseEntity<>("File uploaded successfully! " + res, HttpStatus.ACCEPTED.OK);
+    }
+
+    @GetMapping("/assets/image/{id}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String id) throws Exception {
+        log.info("REST Request download file");
+        long start = System.currentTimeMillis();
+        HttpHeaders headers = new HttpHeaders();
+        LoadFile file = assetService.downloadFile(id);
+
+        byte[] media = file.getFile();
+        String mediaType = file.getFileType();
+
+        headers.set("Content-Type", mediaType);
+
+        ResponseEntity<byte[]> responseEntity = new ResponseEntity<>(media, headers, HttpStatus.OK);
+        log.info("length of time to download file: " + (System.currentTimeMillis() - start) + " in ms");
+        return responseEntity;
     }
 }

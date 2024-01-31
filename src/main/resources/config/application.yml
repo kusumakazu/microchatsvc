@@ -17,6 +17,16 @@
 ---
 # Conditionally disable springdoc on missing api-docs profile
 spring:
+  data:
+    mongodb:
+      gridfs:
+        bucket: myGridFSBucket
+  codec:
+    max-in-memory-size: 20MB
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   config:
     activate:
       on-profile: '!api-docs'

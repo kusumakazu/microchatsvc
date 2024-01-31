@@ -33,6 +33,12 @@ management:
         enabled: false
 
 spring:
+  codec:
+    max-in-memory-size: 20MB
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 20MB
   devtools:
     restart:
       enabled: false
